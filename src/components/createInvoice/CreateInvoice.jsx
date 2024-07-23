@@ -167,7 +167,7 @@ function CreateInvoice() {
                             isLoading ? (
                                 <LoadingButton btnClass="w-full" btnText="Loading" btnVariant="outline"/>
                             ) : (
-                                <Button type="submit" className="w-full">Submit</Button>
+                                <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-800">Submit</Button>
                             )
                         }
                     </form>

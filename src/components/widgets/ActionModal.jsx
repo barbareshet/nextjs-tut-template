@@ -13,7 +13,7 @@ import {
 function ActionModal({children, trigger, title, desc, btnText, onClick, open, setOpen}) {
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
-            <AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
                 {trigger}
             </AlertDialogTrigger>
             <AlertDialogContent>
