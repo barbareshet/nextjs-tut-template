@@ -1,6 +1,9 @@
 import { Separator } from "@/components/ui/separator";
 import CreateInvoice from "@/components/createInvoice/CreateInvoice";
 import ListInvoice from "@/components/listInvoice/ListInvoice";
+
+import {connectDB} from "@/db/db";
+
 export default function Home() {
   return (
     <div className="flex justify-center min-h-[82vh]">
