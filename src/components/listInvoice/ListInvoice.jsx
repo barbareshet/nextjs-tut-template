@@ -60,10 +60,10 @@ function ListInvoice({total, pageNumber, invoices}) {
                                 <TableCell>
                                     <div className="flex-start space-x-2">
                                         {
-                                            invoice.customer.image && (
+                                            invoice?.customer?.image && (
                                                 <Avatar>
-                                                    <AvatarImage src={invoice.customer.image} alt="@shadcn" />
-                                                    <AvatarFallback>CN</AvatarFallback>
+                                                    <AvatarImage src={invoice?.customer?.image} alt="@shadcn" />
+                                                    <AvatarFallback>{invoice?.customer?.name.slice(0,2)}</AvatarFallback>
                                                 </Avatar>
                                             )
                                         }
@@ -71,19 +71,14 @@ function ListInvoice({total, pageNumber, invoices}) {
 
                                         </span>
                                         <span>
-                                            {invoice.customer.name}
+                                            {invoice?.customer?.name}
                                         </span>
                                     </div>
                                 </TableCell>
-                                <TableCell>{invoice.customer.email}</TableCell>
-                                <TableCell className="text-right">{invoice.amount}</TableCell>
+                                <TableCell>{invoice?.customer?.email}</TableCell>
+                                <TableCell className="text-right">{invoice?.amount}</TableCell>
                                 <TableCell className="text-center">
-                                    {invoice.status === "unpaid" ? (
-                                        <Badge className="bg-red-500 text-white">{invoice.status}</Badge>
-                                        ) : (
-                                        <Badge className="bg-green-500 text-white">{invoice.status}</Badge>
-                                        )
-                                    }
+                                    <Badge variant={ invoice?.status === 'paid' ? "success" : "danger"}>{invoice.status}</Badge>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex-start space-x-2">
