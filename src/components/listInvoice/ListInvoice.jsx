@@ -22,6 +22,7 @@ import ReactPaginate from 'react-paginate';
 import { BiEdit, BiEnvelope, BiTrash} from "react-icons/bi";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from 'use-debounce';
+import InvoiceItem from "@/components/invoiceItem/InvoiceItem";
 function ListInvoice({total, pageNumber, invoices}) {
 
     const router = useRouter();
@@ -108,40 +109,7 @@ function ListInvoice({total, pageNumber, invoices}) {
                     </TableHeader>
                     <TableBody className="w-full">
                         {invoices.map((invoice) => (
-                            <TableRow key={invoice.invoice}>
-                                <TableCell className="font-medium">{shortenId(invoice._id)}</TableCell>
-                                <TableCell>
-                                    <div className="flex-start space-x-2">
-                                        {
-                                            invoice?.customer?.image && (
-                                                <Avatar>
-                                                    <AvatarImage src={invoice?.customer?.image} alt="@shadcn" />
-                                                    <AvatarFallback>{invoice?.customer?.name.slice(0,2)}</AvatarFallback>
-                                                </Avatar>
-                                            )
-                                        }
-                                        <span>
-
-                                        </span>
-                                        <span>
-                                            {invoice?.customer?.name}
-                                        </span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>{invoice?.customer?.email}</TableCell>
-                                <TableCell className="text-right">{invoice?.amount}</TableCell>
-                                <TableCell className="text-center">
-                                    <Badge variant={ invoice?.status === 'paid' ? "success" : "danger"}>{invoice.status}</Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex-start space-x-2">
-                                        <span><BiEnvelope/></span>
-                                        <span><BiEdit/></span>
-                                        <span><BiTrash/></span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>{formatDate(invoice.createdAt)}</TableCell>
-                            </TableRow>
+                            <InvoiceItem invoice={invoice} key={invoice._id}/>
                         ))}
                     </TableBody>
                     <TableFooter className="w-full">
