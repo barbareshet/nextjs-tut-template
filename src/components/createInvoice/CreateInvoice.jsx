@@ -84,6 +84,10 @@ function CreateInvoice() {
             }
             if ( response?.message ){
                 toast.success(response?.message);
+                form.reset();
+                setTimeout( () => {
+                    setOpen(!open)
+                }, 2500)
             }
         }
     }

@@ -3,8 +3,15 @@ import CreateInvoice from "@/components/createInvoice/CreateInvoice";
 import ListInvoice from "@/components/listInvoice/ListInvoice";
 
 import {connectDB} from "@/db/db";
+import {getInvoices} from "@/actions/invoiceActions";
 
-export default function Home() {
+export default async function Home({ searchParams }) {
+    const search = searchParams?.search || "";
+    const page = searchParams?.page || "";
+
+    const res = await getInvoices({ search, page, limit: 5})
+    const invoices = JSON.parse(res) || [];
+    // console.log(invoices)
   return (
     <div className="flex justify-center min-h-[82vh]">
       <section className="w-full px-2 max-w-[1000px]">
@@ -15,7 +22,11 @@ export default function Home() {
                 <CreateInvoice />
             </div>
           <Separator className="my-2 border-b-[2px] border-color-dark-blue" />
-          <ListInvoice/>
+          <ListInvoice
+              total={invoices.totalItems}
+              pageNumber={invoices.pageCount}
+              invoices={invoices.data}
+          />
       </section>
     </div>
   );
