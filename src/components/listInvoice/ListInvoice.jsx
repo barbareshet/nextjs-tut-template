@@ -31,6 +31,7 @@ function ListInvoice({total, pageNumber, invoices}) {
     const [pageCount, setPageCount] = useState(1);
     const currentPage = useRef(1);
 
+    const [search, setSearch] = useState("");
     // Pagination Start
     useEffect(() => {
         if (total > 0){
@@ -39,7 +40,7 @@ function ListInvoice({total, pageNumber, invoices}) {
     }, [pageNumber, total]);
 
     function handlePageClick(e) {
-        console.log(e)
+        // console.log(e)
         const params = new URLSearchParams(searchParams.toString());
         if ( currentPage.current ){
             params.set( "page", e.selected + 1 )
@@ -51,9 +52,24 @@ function ListInvoice({total, pageNumber, invoices}) {
 
     const { paid, unpaid } = calculateSums(invoices);
     // console.log({total, pageNumber, invoices})
-    const handleSearchChange = (e) => {
-        e.preventDefault()
+
+    // Search Start
+    const handleSearchChange = async (e) => {
+        console.log(e)
+        const params = new URLSearchParams(searchParams.toString());
+        params.set( "page", 1 )
+        if ( search ){
+            params.set( "search", search )
+        } else {
+            params.delete( "search" )
+        }
+
+        router.replace(`${pathName}?${params.toString()}`);
     }
+    useEffect(() => {
+        handleSearchChange()
+    }, [search]);
+    // Search End
 
 
     return (
@@ -61,10 +77,10 @@ function ListInvoice({total, pageNumber, invoices}) {
             <div className="flex-between border-b-[1px] border-gray-400 pb-3 pt-2">
                 <p className="text-sm">There are {total} Invoices</p>
                 <Search
-                    value={""}
+                    value={search}
                     defaultValue={""}
                     placeHolder="Search..."
-                    onChange={""}
+                    onChange={(e) => setSearch(e.target.value)}
                 />
             </div>
             <div className="table w-full">
