@@ -4,7 +4,9 @@ import {formatDate, shortenId} from "@/utils/utils";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Badge} from "@/components/ui/badge";
 import {BiEdit, BiEnvelope, BiTrash} from "react-icons/bi";
-
+import Tooltip from "rc-tooltip";
+import "rc-tooltip/assets/bootstrap_white.css"
+import Link from "next/link";
 function InvoiceItem({invoice}) {
     return (
         <TableRow key={invoice.invoice}>
@@ -25,15 +27,29 @@ function InvoiceItem({invoice}) {
                 </div>
             </TableCell>
             <TableCell>{invoice?.customer?.email}</TableCell>
-            <TableCell className="text-right">{invoice?.amount}</TableCell>
+            <TableCell className="text-center">${invoice?.amount}</TableCell>
             <TableCell className="text-center">
                 <Badge variant={ invoice?.status === 'paid' ? "success" : "danger"}>{invoice.status}</Badge>
             </TableCell>
             <TableCell>
                 <div className="flex-start space-x-2">
-                    <span><BiEnvelope/></span>
-                    <span><BiEdit/></span>
-                    <span><BiTrash/></span>
+                    <span>
+                        <Tooltip placement="top" trigger={['hover']} overlay={<span>Send Invoice</span>}>
+                            <BiEnvelope size={24} className="text-purple-900 hover:cursor-pointer"/>
+                        </Tooltip>
+                    </span>
+                    <span>
+                        <Tooltip placement="top" trigger={['hover']} overlay={<span>Edit Invoice</span>}>
+                            <Link href={`/?id=${invoice?._id}`}>
+                                <BiEdit size={24} className="text-purple-900 hover:cursor-pointer"/>
+                            </Link>
+                        </Tooltip>
+                    </span>
+                    <span>
+                        <Tooltip placement="top" trigger={['hover']} overlay={<span>Delete Invoice</span>}>
+                            <BiTrash size={24} className="text-purple-900 hover:cursor-pointer"/>
+                        </Tooltip>
+                    </span>
                 </div>
             </TableCell>
             <TableCell>{formatDate(invoice.createdAt)}</TableCell>
