@@ -17,7 +17,7 @@ const invoiceModel = new Schema({
     },
     sent: {
         type: Number,
-        trim: 0,
+        default: 0,
         required: true
     }
 },

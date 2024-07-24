@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getErrorMessages } from "@/utils/getErrorMessages";
 
 export const createInvoice = async (formData) => {
-    const {customer, amount, status} = formData;
+    const { customer, amount, status } = formData;
 
     try{
         if ( !amount || !customer || !status ){
@@ -17,7 +17,7 @@ export const createInvoice = async (formData) => {
         const createInvoice = await Invoice.create({
             customer,
             amount,
-            status
+            status,
         })
         revalidatePath("/");
         return {

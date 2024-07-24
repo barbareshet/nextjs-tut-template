@@ -7,8 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import customers from "@/db/customers";
-import Link from "next/link";
-
+import { toast } from 'react-toastify';
 import {
     Form,
     FormControl,
@@ -28,8 +27,9 @@ import {
 } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input";
-import {Loader} from "lucide-react";
 import {LoadingButton} from "@/components/widgets/Loader";
+import { useRouter, useSearchParams } from "next/navigation";
+import {createInvoice} from "@/actions/invoiceActions";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -48,6 +48,10 @@ const formSchema = z.object({
 function CreateInvoice() {
     const [open, setOpen] = useState(false);
 
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const id = searchParams.get("id");
     // 1. Define your form.
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -58,9 +62,30 @@ function CreateInvoice() {
         },
     })
     // 2. Define a submit handler.
-    function onSubmit(values) {
+    async function onSubmit(values) {
         const {name, amount, status} = values;
-        console.log({name, amount, status})
+        const customer = customers.find((c) => c.name === name);
+        // console.log({name, amount, status})
+        const formData = {
+            amount,
+            customer,
+            status,
+            id: id ? id : ""
+        }
+        if (id){
+            // update invoice action
+        } else {
+            //create new invoice
+            const response = await createInvoice(formData)
+            console.log(response);
+
+            if ( response?.error ){
+                toast.error(response?.error);
+            }
+            if ( response?.message ){
+                toast.success(response?.message);
+            }
+        }
     }
 
     const isLoading = form.formState.isSubmitting;
