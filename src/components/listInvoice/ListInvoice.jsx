@@ -21,7 +21,7 @@ import { formatDate, shortenId, calculateSums } from "@/utils/utils";
 import ReactPaginate from 'react-paginate';
 import { BiEdit, BiEnvelope, BiTrash} from "react-icons/bi";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-
+import { useDebouncedCallback } from 'use-debounce';
 function ListInvoice({total, pageNumber, invoices}) {
 
     const router = useRouter();
@@ -55,19 +55,28 @@ function ListInvoice({total, pageNumber, invoices}) {
 
     // Search Start
     const handleSearchChange = async (e) => {
-        console.log(e)
-        const params = new URLSearchParams(searchParams.toString());
-        params.set( "page", 1 )
-        if ( search ){
-            params.set( "search", search )
-        } else {
-            params.delete( "search" )
-        }
 
-        router.replace(`${pathName}?${params.toString()}`);
     }
+
+    // Debounce callback
+    const debouncedHandleSearch = useDebouncedCallback(
+        // function
+        () => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set( "page", 1 )
+            if ( search ){
+                params.set( "search", search )
+            } else {
+                params.delete( "search" )
+            }
+
+            router.replace(`${pathName}?${params.toString()}`);
+        },
+        // delay in ms
+        3000
+    );
     useEffect(() => {
-        handleSearchChange()
+        debouncedHandleSearch()
     }, [search]);
     // Search End
 
