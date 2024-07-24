@@ -1,4 +1,5 @@
-import React from 'react';
+"use client"
+import React, {useRef, useState} from 'react';
 import Search from "@/components/widgets/Search";
 import {
     Table,
@@ -17,11 +18,19 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar"
 import { formatDate, shortenId, calculateSums } from "@/utils/utils";
-
+import ReactPaginate from 'react-paginate';
 import { BiEdit, BiEnvelope, BiTrash} from "react-icons/bi";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 function ListInvoice({total, pageNumber, invoices}) {
 
+    const router = useRouter();
+    const pathName = usePathname();
+    const searchParams = useSearchParams();
+
+    const [pageCount, setPageCount] = useState(1);
+    const currentPage = useRef(1);
+    
     const { paid, unpaid } = calculateSums(invoices);
     // console.log({total, pageNumber, invoices})
     const handleSearchChange = (e) => {
@@ -107,6 +116,19 @@ function ListInvoice({total, pageNumber, invoices}) {
                     </TableFooter>
                 </Table>
             </div>
+            {
+                invoices.length > 0 && (
+                    <ReactPaginate
+                        breakLabel="..."
+                        nextLabel="next >"
+                        onPageChange={}
+                        pageRangeDisplayed={5}
+                        pageCount={pageCount}
+                        previousLabel="< previous"
+                        renderOnZeroPageCount={null}
+                    />
+                )
+            }
         </div>
     );
 }
