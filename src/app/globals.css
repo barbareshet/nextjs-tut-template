@@ -291,13 +291,20 @@ a:hover {
   }
 
   .pagination .page-num {
-    @apply px-4 py-2 cursor-pointer rounded-md text-gray-700 border border-gray-700 hover:bg-blue-600 hover:text-white dark:text-white dark:border-gray-300 ;
+    @apply px-4 py-2 cursor-pointer rounded-md text-gray-700 border border-purple-700 hover:bg-purple-600 hover:text-white dark:text-white dark:border-gray-300 ;
   }
 
-  .pagination .page-num.activePage {
-    @apply bg-blue-600 text-white;
+  .pagination .activePage a{
+    @apply bg-purple-600 text-white;
   }
-
+  .pagination .page-num.page-num-next a,
+  .pagination .page-num.page-num-prev a{
+    @apply text-purple-800;
+  }
+  .pagination .page-num.page-num-next:hover a,
+  .pagination .page-num.page-num-prev:hover a{
+    @apply text-white;
+  }
   .active {
     position: relative;
     color: orangered;

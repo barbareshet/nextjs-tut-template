@@ -1,5 +1,5 @@
 "use client"
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Search from "@/components/widgets/Search";
 import {
     Table,
@@ -30,12 +30,31 @@ function ListInvoice({total, pageNumber, invoices}) {
 
     const [pageCount, setPageCount] = useState(1);
     const currentPage = useRef(1);
-    
+
+    // Pagination Start
+    useEffect(() => {
+        if (total > 0){
+            setPageCount(pageNumber);
+        }
+    }, [pageNumber, total]);
+
+    function handlePageClick(e) {
+        console.log(e)
+        const params = new URLSearchParams(searchParams.toString());
+        if ( currentPage.current ){
+            params.set( "page", e.selected + 1 )
+        }
+        currentPage.current = e.selected + 1;
+        router.replace(`${pathName}?${params.toString()}`);
+    }
+    // Pagination End
+
     const { paid, unpaid } = calculateSums(invoices);
     // console.log({total, pageNumber, invoices})
     const handleSearchChange = (e) => {
         e.preventDefault()
     }
+
 
     return (
         <div>
@@ -101,17 +120,17 @@ function ListInvoice({total, pageNumber, invoices}) {
                         ))}
                     </TableBody>
                     <TableFooter className="w-full">
-                        <TableRow>
-                            <TableCell colSpan={3}>Total Paid</TableCell>
-                            <TableCell colSpan={3} className="text-right">${paid}</TableCell>
+                        <TableRow className="w-full">
+                            <TableCell colSpan={4}>Total Paid</TableCell>
+                            <TableCell colSpan={4} className="text-right">${paid}</TableCell>
                         </TableRow>
-                        <TableRow>
-                            <TableCell colSpan={3}>Total Unpaid</TableCell>
-                            <TableCell colSpan={3} className="text-right">${unpaid}</TableCell>
+                        <TableRow className="w-full">
+                            <TableCell colSpan={4}>Total Unpaid</TableCell>
+                            <TableCell colSpan={4} className="text-right">${unpaid}</TableCell>
                         </TableRow>
-                        <TableRow>
-                            <TableCell colSpan={3}>Total</TableCell>
-                            <TableCell colSpan={3} className="text-right">${paid - unpaid}</TableCell>
+                        <TableRow className="w-full">
+                            <TableCell colSpan={4}>Total</TableCell>
+                            <TableCell colSpan={4} className="text-right">${paid - unpaid}</TableCell>
                         </TableRow>
                     </TableFooter>
                 </Table>
@@ -120,12 +139,17 @@ function ListInvoice({total, pageNumber, invoices}) {
                 invoices.length > 0 && (
                     <ReactPaginate
                         breakLabel="..."
-                        nextLabel="next >"
-                        onPageChange={}
-                        pageRangeDisplayed={5}
+                        nextLabel="Next >"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={3}
                         pageCount={pageCount}
-                        previousLabel="< previous"
+                        previousLabel="< Prev"
                         renderOnZeroPageCount={null}
+                        containerClassName="pagination"
+                        pageLinkClassName="page-num"
+                        previousClassName="page-num page-num-prev"
+                        nextClassName="page-num page-num-next"
+                        activeClassName="activePage"
                     />
                 )
             }
