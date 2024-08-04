@@ -32,5 +32,5 @@ const customerModel = new Schema({
         timestamps: true
     }
 )
-const Customer = models?.customer || mongoose.model("Customer", customerModel );
+const Customer = models?.Customer || mongoose.model("Customer", customerModel );
 export default Customer;
