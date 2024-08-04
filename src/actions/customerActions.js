@@ -1,6 +1,6 @@
 "use server"
 import { connectDB } from "@/db/db";
-import Customer from "@/models/Customer";
+import Customer from "@/models/customer";
 import { revalidatePath } from "next/cache";
 import { getErrorMessages } from "@/utils/getErrorMessages";
 
