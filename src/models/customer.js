@@ -1,10 +1,6 @@
 import mongoose, {models, Schema} from "mongoose";
 
 const customerModel = new Schema({
-        id: {
-            type: Number,
-            required: true
-        },
         name: {
             type: String,
             required: true
@@ -28,7 +24,8 @@ const customerModel = new Schema({
         },
         email: {
             type: String,
-            required: true
+            required: true,
+            unique: true,
         }
 },
     {

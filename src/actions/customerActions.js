@@ -5,68 +5,81 @@ import { revalidatePath } from "next/cache";
 import { getErrorMessages } from "@/utils/getErrorMessages";
 
 export const createCustomer = async (formData) => {
-    const { customer, amount, status } = formData;
-
-    try{
-        if ( !amount || !customer || !status ){
-            return{
-                error: "PLease fill in all fields"
-            }
+    const { name, businessName, description, email, phone, image } = formData;
+    console.log({formData})
+    try {
+        if (!name || !businessName || !description || !email || !phone) {
+            return {
+                error: "Please fill in all fields"
+            };
         }
-        const connection = await connectDB();
-        const createCustomer = await Customer.create({
-            customer,
-            amount,
-            status,
-        })
-        revalidatePath("/");
-        return {
-            message: "Customer created successfully"
-        }
-    } catch (error){
-        console.error(error)
-        return {
-            error: getErrorMessages(error)
-        }
-    }
-}
-export const getCustomers = async (params) => {
-    const page = parseInt(params.page) || 1;
-    const limit = parseInt(params.limit) || 10;
-    const skip = ( page -1 ) * limit;
 
-    const query = {
-        ...( params.search &&
-            {
-                $or: [
-                    { amount: { $regex: params.search, $options: "i" } },
-                    { status: { $regex: params.search, $options: "i" } },
-                    { "customer.name": { $regex: params.search, $options: "i" } },
-                    { "customer.email": { $regex: params.search, $options: "i" } },
-                ],
-            }
-        )
-    }
-
-    try{
-
+        console.log("Connecting to DB...");
         await connectDB();
-        const Customers = await Customer.find(query)
-            .skip(skip)
-            .limit(limit)
-        const totalItems = await Customer.countDocuments(query);
-        const pageCount = Math.ceil( totalItems / limit );
 
-        return JSON.stringify({
-            totalItems,
-            pageCount,
-            data: Customers,
+        console.log("Creating customer with data:", formData);
+        await Customer.create({
+            name,
+            businessName,
+            description,
+            email,
+            phone,
+            image
         });
 
-    } catch (error){
-        console.error(error)
+        console.log("Customer created, revalidating path...");
+        revalidatePath("/");
+
+        return {
+            message: "Customer created successfully"
+        };
+    } catch (error) {
+        console.error("Error occurred:", error);
         return {
             error: getErrorMessages(error)
-        }
+        };
     }
+};
+
+/**
+ *
+ * @param search
+ * @param page
+ * @param limit
+ * @returns {Promise<string>}
+ */
+export async function getCustomers({ search = "", page = 1, limit = 5 }) {
+    await connectDB();
+
+    // Implement your logic to fetch customers
+    const customers = await Customer.find()
+        .skip((page - 1) * limit)
+        .limit(limit);
+
+    const totalItems = await Customer.countDocuments();
+    const pageCount = Math.ceil(totalItems / limit);
+
+    return JSON.stringify({
+        data: customers,
+        totalItems,
+        pageCount,
+    });
+}
+
+/**
+ * Get clients list
+ * @returns {Promise<{totalItems: awaited Query<number, THydratedDocumentType, TQueryHelpers, TRawDocType, "countDocuments", TInstanceMethods> & TQueryHelpers, data: awaited Query<Array<THydratedDocumentType>, THydratedDocumentType, TQueryHelpers, TRawDocType, "find", TInstanceMethods> & TQueryHelpers}>}
+ */
+export async function getCustomersList() {
+    await connectDB();
+
+    // Fetch customers from the database
+    const customers = await Customer.find();
+    const totalItems = await Customer.countDocuments();
+
+    // Return customers data as a JavaScript object
+    return {
+        data: customers,
+        totalItems
+    };
 }

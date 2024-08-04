@@ -9,9 +9,12 @@ export default function Header() {
           <h2 className="text-white font-semibold">Invoice<span className="text-color-secondary">Manager</span></h2>
         </div>
         <nav>
-          <ul>
+          <ul className="flex gap-2">
             <li>
               <Link href="/" className="text-white">Home</Link>
+            </li>
+            <li>
+              <Link href="/customers" className="text-white">Customers</Link>
             </li>
           </ul>
         </nav>
