@@ -11,6 +11,7 @@ import Link from "next/link";
 import DeleteModal from "@/components/widgets/DeleteModal";
 import {deleteInvoice} from "@/actions/invoiceActions";
 import { toast } from 'react-toastify';
+import {sendEmail} from "@/actions/emailActions";
 function InvoiceItem({invoice}) {
 
     const onDelete = async (id) => {
@@ -27,6 +28,24 @@ function InvoiceItem({invoice}) {
         }
     }
 
+    const sendThisInvoice = async (invoice) => {
+        confirm('Are you sure you want to send this invoice?');
+        //create new invoice
+        const response = await sendEmail({
+            subject: "New Invoice",
+            message: "This is a new invoice",
+            email: "bar.nea27@gmail.com",
+            data: invoice
+        })
+        console.log(response);
+
+        // if ( response?.error ){
+        //     toast.error(response?.error);
+        // }
+        // if ( response?.message ){
+        //     toast.success(response?.message);
+        // }
+    }
     return (
         <TableRow key={invoice.invoice}>
             <TableCell className="font-medium">{shortenId(invoice._id)}</TableCell>
@@ -54,7 +73,11 @@ function InvoiceItem({invoice}) {
                 <div className="flex-start space-x-2">
                     <span>
                         <Tooltip placement="top" trigger={['hover']} overlay={<span>Send Invoice</span>}>
-                            <BiEnvelope size={24} className="text-purple-900 hover:cursor-pointer"/>
+                            <BiEnvelope
+                                size={24}
+                                className="text-purple-900 hover:cursor-pointer"
+                                onClick={() => sendThisInvoice(invoice)}
+                            />
                         </Tooltip>
                     </span>
                     <span>

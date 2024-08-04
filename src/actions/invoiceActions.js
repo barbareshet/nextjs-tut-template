@@ -170,3 +170,7 @@ export const updateInvoice = async (formData) => {
         }
     }
 }
+
+export const sendInvoice = async () => {
+
+}
