@@ -29,22 +29,27 @@ function InvoiceItem({invoice}) {
     }
 
     const sendThisInvoice = async (invoice) => {
+        console.log(invoice)
         confirm('Are you sure you want to send this invoice?');
+
         //create new invoice
         const response = await sendEmail({
-            subject: "New Invoice",
-            message: "This is a new invoice",
-            email: "bar.nea27@gmail.com",
-            data: invoice
+            subject: "New Invoice from Barbareshet",
+            // message: "This is a new invoice",
+            email: "bar.nea27@gmail.com",//user email invoice.customer.email
+            data: {
+                name: invoice?.customer?.name,
+                amount: invoice?.amount
+            }
         })
         console.log(response);
 
-        // if ( response?.error ){
-        //     toast.error(response?.error);
-        // }
-        // if ( response?.message ){
-        //     toast.success(response?.message);
-        // }
+        if ( response?.error ){
+            toast.error(response?.error);
+        }
+        if ( response?.message ){
+            toast.success(response?.message);
+        }
     }
     return (
         <TableRow key={invoice.invoice}>
