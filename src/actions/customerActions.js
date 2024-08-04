@@ -4,6 +4,11 @@ import Customer from "@/models/Customer";
 import { revalidatePath } from "next/cache";
 import { getErrorMessages } from "@/utils/getErrorMessages";
 
+/**
+ * 
+ * @param formData
+ * @returns {Promise<{error}|{error: string}|{message: string}>}
+ */
 export const createCustomer = async (formData) => {
     const { name, businessName, description, email, phone, image } = formData;
     console.log({formData})
