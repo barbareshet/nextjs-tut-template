@@ -4,6 +4,11 @@ import Invoice from "@/models/invoice";
 import { revalidatePath } from "next/cache";
 import { getErrorMessages } from "@/utils/getErrorMessages";
 
+/**
+ * create new invoice
+ * @param formData
+ * @returns {Promise<{error}|{error: string}|{message: string}>}
+ */
 export const createInvoice = async (formData) => {
     const { customer, amount, status } = formData;
 
@@ -30,6 +35,12 @@ export const createInvoice = async (formData) => {
         }
     }
 }
+
+/**
+ * Get all invoices
+ * @param params
+ * @returns {Promise<{error}|string>}
+ */
 export const getInvoices = async (params) => {
     const page = parseInt(params.page) || 1;
     const limit = parseInt(params.limit) || 10;
@@ -62,6 +73,95 @@ export const getInvoices = async (params) => {
             pageCount,
             data: invoices,
         });
+
+    } catch (error){
+        console.error(error)
+        return {
+            error: getErrorMessages(error)
+        }
+    }
+}
+/**
+ * Delete an invoice
+ * @param id
+ * @returns {Promise<{error}|{error: string}|{message: string}>}
+ */
+export const deleteInvoice = async (id) => {
+
+    try{
+        if ( !id ){
+            return{
+                error: "Invoice not found"
+            }
+        }
+
+        await connectDB();
+        await Invoice.findByIdAndDelete(id);
+        revalidatePath("/");
+        return {
+            message: "Invoice deleted successfully"
+        }
+
+
+    } catch (error){
+        console.error(error)
+        return {
+            error: getErrorMessages(error)
+        }
+    }
+}
+/**
+ * Get Single Invoice
+ * @param id
+ * @returns {Promise<{error}|{error: string}|string>}
+ */
+export const getInvoice = async (id) => {
+
+    try{
+        if ( !id ){
+            return{
+                error: "Invoice not found"
+            }
+        }
+
+        await connectDB();
+        const invoice = await Invoice.findById(id);
+
+        return JSON.stringify(invoice)
+
+
+    } catch (error){
+        console.error(error)
+        return {
+            error: getErrorMessages(error)
+        }
+    }
+}
+
+/**
+ * Update Invoice
+ * @param formData
+ * @returns {Promise<{error}|{error: string}|string>}
+ */
+export const updateInvoice = async (formData) => {
+    const { customer, amount, status, id } = formData;
+    try{
+        if ( !id ){
+            return{
+                error: "Invoice not found"
+            }
+        }
+
+        await connectDB();
+        await Invoice.findByIdAndUpdate(id, {
+            amount,
+            status
+        });
+
+        revalidatePath('/');
+        return {
+            message: "Invoice updated succesfully"
+        }
 
     } catch (error){
         console.error(error)

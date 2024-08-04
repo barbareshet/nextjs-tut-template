@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import {TableCell, TableRow} from "@/components/ui/table";
 import {formatDate, shortenId} from "@/utils/utils";
@@ -7,7 +8,25 @@ import {BiEdit, BiEnvelope, BiTrash} from "react-icons/bi";
 import Tooltip from "rc-tooltip";
 import "rc-tooltip/assets/bootstrap_white.css"
 import Link from "next/link";
+import DeleteModal from "@/components/widgets/DeleteModal";
+import {deleteInvoice} from "@/actions/invoiceActions";
+import { toast } from 'react-toastify';
 function InvoiceItem({invoice}) {
+
+    const onDelete = async (id) => {
+        confirm('Are you sure you want to delete this invoice?');
+        //create new invoice
+        const response = await deleteInvoice(id)
+        console.log(response);
+
+        if ( response?.error ){
+            toast.error(response?.error);
+        }
+        if ( response?.message ){
+            toast.success(response?.message);
+        }
+    }
+
     return (
         <TableRow key={invoice.invoice}>
             <TableCell className="font-medium">{shortenId(invoice._id)}</TableCell>
@@ -47,7 +66,12 @@ function InvoiceItem({invoice}) {
                     </span>
                     <span>
                         <Tooltip placement="top" trigger={['hover']} overlay={<span>Delete Invoice</span>}>
-                            <BiTrash size={24} className="text-purple-900 hover:cursor-pointer"/>
+                           <DeleteModal
+                               title="Delete Invoice"
+                               desc="Click to delete an invoice"
+                               password="delete"
+                               onClick={() => onDelete(invoice?._id)}
+                           />
                         </Tooltip>
                     </span>
                 </div>

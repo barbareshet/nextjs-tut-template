@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ActionModal from "@/components/widgets/ActionModal";
 import {Button} from "@/components/ui/button";
 
@@ -29,7 +29,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input";
 import {LoadingButton} from "@/components/widgets/Loader";
 import { useRouter, useSearchParams } from "next/navigation";
-import {createInvoice} from "@/actions/invoiceActions";
+import {createInvoice, getInvoice, updateInvoice} from "@/actions/invoiceActions";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -74,6 +74,19 @@ function CreateInvoice() {
         }
         if (id){
             // update invoice action
+            const response = await updateInvoice(formData)
+
+            if ( response?.error ){
+                toast.error(response?.error);
+            }
+            if ( response?.message ){
+                toast.success(response?.message);
+                // form.reset();
+                setTimeout( () => {
+                    setOpen(!open)
+                }, 2500)
+            }
+
         } else {
             //create new invoice
             const response = await createInvoice(formData)
@@ -93,7 +106,29 @@ function CreateInvoice() {
     }
 
     const isLoading = form.formState.isSubmitting;
+    // getting a single invoice to Update
+    useEffect(() => {
+        const fetchInvoiceData = async () => {
+            const res = await getInvoice(id);
+            const invoice = JSON.parse(res);
 
+            form.setValue("name", invoice?.customer?.name);
+            form.setValue("amount", invoice?.amount);
+            form.setValue("status", invoice?.status);
+        }
+
+        if (id){
+            setOpen(true);
+            fetchInvoiceData(id);
+        }
+    }, [id]);
+
+    // when closing the invoice modal
+    useEffect(() => {
+        if (!open){
+            router.replace('/');
+        }
+    }, [open, router]);
     return (
         <div>
             <ActionModal
@@ -120,7 +155,11 @@ function CreateInvoice() {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        value={field.value}
+                                    >
                                         <FormControl>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Select a customer" />
@@ -168,6 +207,7 @@ function CreateInvoice() {
                                         <RadioGroup
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
+                                            value={field.value}
                                             className="flex flex-col space-y-1"
                                         >
                                             <FormItem className="flex items-center space-x-3 space-y-0">
@@ -196,7 +236,19 @@ function CreateInvoice() {
                             isLoading ? (
                                 <LoadingButton btnClass="w-full" btnText="Loading" btnVariant="outline"/>
                             ) : (
-                                <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-800">Submit</Button>
+                                <Button type="submit" className="w-full bg-purple-700 hover:bg-purple-800">
+                                    {
+                                        id ? (
+                                            <span>
+                                                Update Invoice
+                                            </span>
+                                        ) : (
+                                            <span>
+                                                Create Invoice
+                                            </span>
+                                        )
+                                    }
+                                </Button>
                             )
                         }
                     </form>

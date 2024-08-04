@@ -19,9 +19,9 @@ function DeleteModal({title, desc, password, onClick}) {
     const [keyword, setKeyWord] = useState("")
 
     return (
-        <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialog>
             <AlertDialogTrigger asChild>
-                <BiTrash size={24} className="cursor-pointer"/>
+                <BiTrash size={24} className="text-purple-900 hover:cursor-pointer"/>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
