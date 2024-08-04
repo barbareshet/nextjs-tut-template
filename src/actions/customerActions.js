@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getErrorMessages } from "@/utils/getErrorMessages";
 
 /**
- * 
+ *
  * @param formData
  * @returns {Promise<{error}|{error: string}|{message: string}>}
  */
