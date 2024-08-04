@@ -36,11 +36,14 @@ const formSchema = z.object({
     name: z.string().min(2, {
         message: "Full Name is required.",
     }),
-    status: z.string().min(2, {
-        message: "Status is required.",
+    businessName: z.string().min(2, {
+        message: "Business Name is required.",
     }),
-    amount: z.string().min(1, {
-        message: "Amount is required.",
+    description: z.string().min(2, {
+        message: "Description is required.",
+    }),
+    phone: z.string().min(2, {
+        message: "Phone is required.",
     }),
 })
 
@@ -58,6 +61,7 @@ function CreateClient() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
+            businessName: "",
             amount:"",
             status:"Unpaid"
         },
@@ -66,10 +70,11 @@ function CreateClient() {
     async function onSubmit(values) {
         const {name, email, image} = values;
         const customerExists = customers.find((c) => c.email === email);
-        console.log({name, email, image})
+        console.log({name, email,businessName, image})
 
         const formData = {
             name,
+            businessName,
             email,
             image,
             id: id ? id : ""
@@ -123,6 +128,18 @@ function CreateClient() {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
+                                    <Input type="text"/>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="businessName"
+                            id="businessName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Business Name</FormLabel>
                                     <Input type="text"/>
                                     <FormMessage />
                                 </FormItem>

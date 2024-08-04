@@ -54,10 +54,6 @@ function ListInvoice({total, pageNumber, invoices}) {
     const { paid, unpaid } = calculateSums(invoices);
     // console.log({total, pageNumber, invoices})
 
-    // Search Start
-    const handleSearchChange = async (e) => {
-
-    }
 
     // Debounce callback
     const debouncedHandleSearch = useDebouncedCallback(
@@ -99,8 +95,10 @@ function ListInvoice({total, pageNumber, invoices}) {
                     <TableHeader>
                         <TableRow>
                             <TableHead className="w-[100px]">Invoice</TableHead>
-                            <TableHead>Name</TableHead>
+                            <TableHead>Client Name</TableHead>
+                            <TableHead>Business Name</TableHead>
                             <TableHead>Email</TableHead>
+                            <TableHead>Phone</TableHead>
                             <TableHead className="text-right">Amount</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Actions</TableHead>

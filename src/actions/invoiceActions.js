@@ -54,6 +54,8 @@ export const getInvoices = async (params) => {
                     { status: { $regex: params.search, $options: "i" } },
                     { "customer.name": { $regex: params.search, $options: "i" } },
                     { "customer.email": { $regex: params.search, $options: "i" } },
+                    { "customer.phone": { $regex: params.search, $options: "i" } },
+                    { "customer.businessName": { $regex: params.search, $options: "i" } },
                 ],
             }
         )

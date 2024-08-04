@@ -15,7 +15,7 @@ export default async function Home({ searchParams }) {
     // console.log(invoices)
   return (
     <div className="flex justify-center min-h-[82vh]">
-      <section className="w-full px-2 max-w-[1000px]">
+      <section className="w-full px-2 max-w-[1200px]">
             <div className="flex justify-between">
                 <h3 className="text-2xl font-semibold text-color-black">
                     Your Invoices

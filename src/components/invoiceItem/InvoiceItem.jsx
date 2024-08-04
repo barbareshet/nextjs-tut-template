@@ -69,7 +69,9 @@ function InvoiceItem({invoice}) {
                     </span>
                 </div>
             </TableCell>
+            <TableCell>{invoice?.customer?.businessName}</TableCell>
             <TableCell>{invoice?.customer?.email}</TableCell>
+            <TableCell>{invoice?.customer?.phone}</TableCell>
             <TableCell className="text-center">${invoice?.amount}</TableCell>
             <TableCell className="text-center">
                 <Badge variant={ invoice?.status === 'paid' ? "success" : "danger"}>{invoice.status}</Badge>
