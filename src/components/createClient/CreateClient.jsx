@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input";
 import {LoadingButton} from "@/components/widgets/Loader";
 import { useRouter, useSearchParams } from "next/navigation";
-import {createCustomer} from "@/actions/CustomerActions";
+import { createCustomer } from "@/actions/customerActions";
 
 
 const formSchema = z.object({
