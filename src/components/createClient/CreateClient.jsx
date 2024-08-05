@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import {LoadingButton} from "@/components/widgets/Loader";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createCustomer } from "@/actions/customerActions";
+import Customers from "@/db/customers";
 
 
 const formSchema = z.object({
@@ -74,7 +75,7 @@ function CreateClient() {
     // 2. Define a submit handler.
     async function onSubmit(values) {
         const { name,businessName, description, email, phone,  image} = values;
-        const customerExists = customers.find((c) => c.email === email);
+        const customerExists = Customers.find((c) => c.email === email);
         console.log(values)
 
         const formData = {
