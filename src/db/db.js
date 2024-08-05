@@ -4,7 +4,7 @@ import {console} from "next/dist/compiled/@edge-runtime/primitives";
 
 export const connectDB = async () => {
     try {
-        const connection = await mongoose.connect(process.env.MONGODB_URI)
+        const connection = await mongoose.connect(process.env.NEXT_MONGODB_URI)
         if ( connection ){
             console.log("Connection Success")
             return true

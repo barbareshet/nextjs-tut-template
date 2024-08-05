@@ -13,17 +13,17 @@ export const sendEmail = async ({ subject, message, email, data }) => {
 
     const transporter = nodemailer.createTransport({
         service: "gmail",
-        host: process.env.EMAIL_HOST,
+        host: process.env.NEXT_EMAIL_HOST,
         port: 587,
         secure: true,
         auth:{
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD,
+            user: process.env.NEXT_EMAIL_USER,
+            pass: process.env.NEXT_EMAIL_PASSWORD,
         }
     });
     const template = compileInvoiceTemplate(data.name, data.amount)
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: process.env.NEXT_EMAIL_USER,
         to: email,
         subject,
         html: template
